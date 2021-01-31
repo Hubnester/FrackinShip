@@ -1,0 +1,11 @@
+{
+  "author" : "Hubnester",
+  "description" : "",
+  "friendlyName" : "Frackin Ship",
+  "includes" : ["ztarbound"],
+  "name" : "FrackinShip",
+  "priority" : 1,
+  "requires" : ["FrackinUniverse"],
+  "tags" : "Ships",
+  "version" : "1.0"
+}
