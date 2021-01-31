@@ -1,0 +1,23 @@
+{
+  "id" : "frackinship",
+  "mainQuest" : true,
+  "showInLog" : false,
+  "showAcceptDialog" : false,
+  "showCompleteDialog" : false,
+  "showFailDialog" : false,
+  "title" : "Frackin Ship Tracker",
+  "text" : "A guest for indicating that the player chose the frackin ship.",
+  "completionText" : "Frackin ship selected.",
+  "moneyRange" : [0, 0],
+  "rewards" : [
+    [ ]
+  ],
+  "canBeAbandoned" : false,
+  "updateDelta" : 60,
+  "script" : "/frackinship/quests/frackinship.lua",
+  "scriptConfig" : {
+    "portraits" : {
+      "default" : "sail"
+    }
+  }
+}

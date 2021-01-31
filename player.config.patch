@@ -1,0 +1,7 @@
+[
+	{
+		"op" : "add",
+		"path" : "/companionsConfig/scripts/-",
+		"value" : "/frackinship/scripts/frackinshipplayer.lua"
+	}
+]
