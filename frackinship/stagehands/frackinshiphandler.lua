@@ -23,7 +23,6 @@ function update()
 	if self.shipRenderPromise then
 		if self.shipRenderPromise:finished() then
 			if not self.shipRenderPromise:succeeded() then
-				sb.logInfo("Attempting to place...")
 				-- Make config values later
 				local maxLength = 25
 				local startPos = {1024, 1025}

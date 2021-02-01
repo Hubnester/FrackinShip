@@ -55,7 +55,8 @@ function init()
 	end)
 
 	ship.notInitial = config.getParameter("notInitial")
-	ship.shipResetConfirmationDialogs = ship.config.shipResetConfirmationDialogs
+	ship.shipResetConfirmationDialogs = config.getParameter("shipResetConfirmationDialogs")
+	ship.backgroundPresentConfirmation = config.getParameter("backgroundPresentConfirmation")
 end
 
 function generateShipLists()
@@ -275,8 +276,23 @@ function changeState(newState)
 					end
 				end)
 			else
-				createShip()
-				changeState("shipChosen")
+				local shipConfigFile = root.assetJson("/universe_server.config").speciesShips[player.species()][1]
+				local shipConfig = root.assetJson(shipConfigFile)
+				if shipConfig.backgroundOverlays[1] then
+					promises:add(player.confirm(ship.backgroundPresentConfirmation), function (choice)
+						if state.state == "frackinShipChosen" then
+							if choice then
+								createShip()
+								changeState("shipChosen")
+							else
+								changeState(state.previousState)
+							end
+						end
+					end)
+				else
+					createShip()
+					changeState("shipChosen")
+				end
 			end
 			return
 		elseif newState == "vanillaShipChosen" then
