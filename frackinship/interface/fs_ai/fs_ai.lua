@@ -415,8 +415,8 @@ function populateShipList(shipList)
 end
 
 function createShip(vanilla)
-	if not world.getProperty("fuChosenShip") then
-		world.setProperty("fuChosenShip", true)
+	if not world.getProperty("fsChosenShip") then
+		world.setProperty("fsChosenShip", true)
 		if vanilla then
 			player.upgradeShip(ship.vanillaShip.shipUpgrades)
 		else
@@ -424,7 +424,7 @@ function createShip(vanilla)
 				if string.find(ship.selectedShip.ship, "/") then
 					sb.logWarn("STRUCTURE FILE SHIP SUPPORT NOT YET IMPLEMENTED")
 				else
-					world.sendEntityMessage("frackinshiphandler", "createShip", ship.selectedShip, player.species())
+					world.sendEntityMessage("frackinshiphandler", "createShip", ship.selectedShip)
 				end
 			elseif ship.selectedShip.mode == "Upgradable" then
 				sb.logWarn("UPGRADABLE SHIPS NOT YET IMPLEMENTED")

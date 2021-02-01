@@ -11,6 +11,11 @@ frackinShip = {}
 function init(args)
 	fsInit(args)
 	shiftToFrackinShip()
+	
+	message.setHandler("fs_respawn", function()
+		local spawn = world.getProperty("fu_byos.spawn", {1024, 1025})
+		mcontroller.setPosition(vec2.add(spawn, {0, 2}))
+	end)
 end
 
 -- Change the world property names to the new ones if they exist and the new one doesn't exist
@@ -31,6 +36,10 @@ function shiftToFrackinShip()
 			world.setProperty("frackinship.atmosphereMode", "fullRoom")
 			world.setProperty("fu_byos.newAtmosphereSystem", nil)
 		end
+		if world.getProperty("fu_byos.owner") and not world.getProperty("frackinShip.owner") then
+			world.setProperty("frackinship.owner", world.getProperty("fu_byos.owner"))
+			world.setProperty("fu_byos.owner", nil)
+		end
 	end
 end
 
@@ -48,6 +57,14 @@ function update(dt)
 			end
 		else
 			handlerPromise = world.findUniqueEntity("frackinshiphandler")
+		end
+	end
+	
+	if player.worldId() == player.ownShipWorldId() then
+		if not frackinShip.initFinished then
+			frackinShip.initFinished = true
+			world.setProperty("frackinship.owner", player.uniqueId())
+			world.setProperty("frackinship.race", player.species())
 		end
 	end
 end

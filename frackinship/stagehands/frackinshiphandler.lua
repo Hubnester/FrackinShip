@@ -14,14 +14,44 @@ function init()
 		return {disableUnlockableShips = self.shipConfig.disableUnlockableShips, unlocked = world.universeFlagSet(universeFlag)}
 	end)
 	
-	-- To fix the isssue with old BYOS ships
-	world.setProperty("fuChosenShip", false)
+	if world.getProperty("ship.level", 1) == 0 and not world.getProperty("frackinship") then
+		self.shipRenderPromise = world.findUniqueEntity("fs_shiprender")
+	end
 end
 
 function update()
+	if self.shipRenderPromise then
+		if self.shipRenderPromise:finished() then
+			if not self.shipRenderPromise:succeeded() then
+				sb.logInfo("Attempting to place...")
+				-- Make config values later
+				local maxLength = 25
+				local startPos = {1024, 1025}
+				local modifiers = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
+				local length = 0
+				while length <= maxLength do
+					local placed = false
+					for _, modifier in ipairs (modifiers) do
+						local attemptMod = {}
+						attemptMod[1] = modifier[1] * length
+						attemptMod[2] = modifier[2] * length
+						if world.placeObject("fs_shiprender", vec2.add(startPos, attemptMod)) then
+							placed = true
+							break
+						end
+					end
+					if placed then
+						break
+					end
+					length = length + 1
+				end
+			end
+			self.shipRenderPromise = nil
+		end
+	end
 	if self.placingShip  and world.dungeonId(entity.position()) == self.shipDungeonId then
-		world.setProperty("fu_byos", true)
-		world.setProperty("fuChosenShip", false)
+		world.setProperty("frackinship", true)
+		world.setProperty("fsChosenShip", false)
 		--racialiseShip()
 		local players = world.players()
 		for _, player in ipairs (players) do
@@ -31,8 +61,8 @@ function update()
 	end
 end
 
-function createShip(_, _, ship, playerRace, replaceMode)
-	self.playerRace = playerRace or "apex"
+function createShip(_, _, ship, replaceMode)
+	self.playerRace = world.getProperty("frackinship.race", "apex")
 	self.racialiseRace = ship.racialiserOverride or self.playerRace
 	self.ship = ship.ship
 	replaceMode = replaceMode or {dungeon = "fu_byosblankquarter", size = {512, 512}}
