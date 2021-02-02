@@ -1,0 +1,21 @@
+{
+  "materialId" : 6026,
+  "materialName" : "fsracialisablespaces",
+  "particleColor" : [255, 255, 255, 255],
+  "description" : "A material used to stop things from ",
+  "shortdescription" : "Racialisable Space",
+  "footstepSound" : "/sfx/blocks/footstep_girder.ogg",
+  "health" : 4,
+  "category": "materials",
+  "collisionKind" : "none",
+
+  "renderTemplate" : "/tiles/classicmaterialtemplate.config",
+  "renderParameters" : {
+    "texture" : "fs_tileinvis.png",
+	"variants" : 1,
+    "lightTransparent" : false,
+    "occludesBelow" : true,
+    "multiColored" : false,
+    "zLevel" : 1500
+  }
+}

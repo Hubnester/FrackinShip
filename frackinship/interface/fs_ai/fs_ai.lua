@@ -3,6 +3,7 @@ require "/scripts/pathutil.lua"
 require "/scripts/messageutil.lua"
 require "/zb/zb_textTyper.lua"
 require "/zb/zb_util.lua"
+require "/frackinship/scripts/frackinshiputil.lua"
 
 function init()
 	textUpdateDelay = config.getParameter("textUpdateDelay")
@@ -80,13 +81,13 @@ function generateShipLists()
 			if id == "vanilla" then
 				ship.vanillaShip = data
 			elseif id == "racial" then
-				--[[local racialShipData = root.assetJson("/universe_server.config").speciesShips
-				local raceOverrides = root.assetJson("/interface/objectcrafting/fu_racializer/fu_racializer_racetableoverride.config")
+				local racialShipData = root.assetJson("/universe_server.config").speciesShips
+				local raceOverrides = root.assetJson("/frackinship/configs/racetableoverride.config")
 				local races
 				if data.disallowOtherRaceShips then
 					races = {playerRace}
 				elseif data.whitelistedRaces or data.blacklistedRaces then
-					local allRaces = root.assetJson("/interface/windowconfig/charcreation.config").speciesOrdering
+					local allRaces = frackinship.getRaceList()
 					races = {}
 					for _, race in ipairs (allRaces) do
 						if data.whitelistedRaces then
@@ -100,48 +101,34 @@ function generateShipLists()
 						end
 					end
 				else
-					races = root.assetJson("/interface/windowconfig/charcreation.config").speciesOrdering
+					races = frackinship.getRaceList()
 				end
+				local raceDisplayNames = frackinship.getRaceDisplayNames(races)
 				for _, race in ipairs (races) do
 					local shipData = {}
 					shipData.type = racialShipData[race]
-					shipData.startingLevel = ship.shipConfig.racial.shipLevel + 1
-					local succeded, raceData = pcall(root.assetJson, "/species/" .. race .. ".species")
-					if succeded and raceData then
-						shipData.name = raceData.charCreationTooltip.title
-					else
-						shipData.name = race
-					end
-					shipData.icon = race .. "male.png"
-					local succeded2, previewImage = pcall(getShipImage, shipData.type[shipData.startingLevel])
-					if succeded2 then
-						shipData.previewImage = previewImage
-					else
-						sb.logInfo(sb.printJson(previewImage))
-					end
-					shipData.mode = "Upgradable"
-					if raceOverrides[race] then
-						shipData.name = raceOverrides[race].name or shipData.name
-						shipData.icon = raceOverrides[race].icon or shipData.icon
-					end
-					shipData.name = shipData.name .. " Racial Ship"
-					shipData.icon = "/interface/title/" .. shipData.icon
-					shipData.id = race .. "racial"
-					table.insert(ship.upgradableShips, shipData)
-				end ]]--
-			else
-				local addShip = true
-				if data.universeFlag then
-					addShip = false
-					if not ship.disableUnlockableShips then
-						for _, flag in ipairs (ship.universeFlags or {}) do
-							if flag == data.universeFlag then
-								addShip = true
-								break
-							end
+					if shipData.type then
+						shipData.startingLevel = ship.shipConfig.racial.shipLevel + 1
+						shipData.name = raceDisplayNames[race] or race
+						shipData.icon = race .. "male.png"
+						local succeded2, previewImage = pcall(getShipImage, shipData.type[shipData.startingLevel])
+						if succeded2 then
+							shipData.previewImage = previewImage
+						else
+							sb.logInfo(sb.printJson(previewImage))
 						end
+						shipData.mode = "Upgradable"
+						if raceOverrides[race] then
+							shipData.name = raceOverrides[race].name or shipData.name
+							shipData.icon = raceOverrides[race].icon or shipData.icon
+						end
+						shipData.name = shipData.name .. " Racial Ship"
+						shipData.icon = "/interface/title/" .. shipData.icon
+						shipData.id = race .. "racial"
+						table.insert(ship.upgradableShips, shipData)
 					end
 				end
+			else
 				local ignoreShip = false
 				if data.raceWhitelist and not data.raceWhitelist[playerRace] then
 					ignoreShip = true
@@ -149,7 +136,7 @@ function generateShipLists()
 					ignoreShip = true
 				end
 
-				if addShip and not ignoreShip then
+				if not ignoreShip then
 					data.id = id
 					if type(data.ship) == "table" then
 						data.mode = "Upgradable"
@@ -307,13 +294,13 @@ function changeState(newState)
 				path = path:gsub("<shipMode>", string.lower(tostring(ship.selectedShip.mode)))
 			end
 		elseif newState == "frackinShipChoice" then
-			--widget.setVisible("buttonByos", true)
-			--widget.setVisible("buttonUpgradable", true)
+			widget.setVisible("buttonByos", true)
+			widget.setVisible("buttonUpgradable", true)
 			widget.setVisible("root.shipList", true)
 			for i = 1, 3 do
 				widget.setButtonEnabled("button" .. i, false)
 			end
-			--widget.setSize("root", {144,118})
+			widget.setSize("root", {144,118})
 			if ship.selectedShip and ship.selectedShip.mode == "Upgradable" then
 				buttonPress("buttonUpgradable")
 			else
