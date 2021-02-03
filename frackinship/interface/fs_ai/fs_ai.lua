@@ -437,6 +437,7 @@ function createShip(vanilla)
 			player.startQuest("frackinship")
 		end
 	end
+	world.setProperty("frackinship.constructionTime", os.time())
 	pane.dismiss()
 end
 

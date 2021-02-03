@@ -4,6 +4,17 @@
 		"path" : "/Data/misc/-",
 		"value" : [
 			"externalscript",
+			"^cyan;[FS]^reset; Ship Stats",
+			"/interface/quest.png",
+			"/zb/newSail/fs_customFunctions.lua",
+			"viewShipStats"
+		]
+	},
+	{
+		"op" : "add",
+		"path" : "/Data/misc/-",
+		"value" : [
+			"externalscript",
 			"^cyan;[FS]^reset; Change S.A.I.L Image",
 			"/interface/craftingbutton.png",
 			"/zb/newSail/fs_customFunctions.lua",
@@ -15,5 +26,10 @@
 		"op" : "add",
 		"path" : "/GUI/frackinship",
 		"value" : {}
+	},
+	{
+		"op" : "add",
+		"path" : "/GUI/frackinship/viewShipStatsText",
+		"value" : "Engine Type: <engineType>\nMax Intersystem Flight Distance: <systemTravelDistance>\nMax Crew Members: <crewSize>\nActive Crew Memebers: <activeCrew>\nInactive Crew Members: <inactiveCrew>\nMax Fuel: <maxFuel>\nCurrent Fuel: <fuel>\nFuel Usage: <fuelEfficiency>%\nSpeed: <shipSpeed> million km/s\nMass: <shipMass>t"
 	}
 ]

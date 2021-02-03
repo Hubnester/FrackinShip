@@ -45,3 +45,14 @@ function frackinship.getRaceDisplayNames(races)
 	end
 	return raceDisplayNames
 end
+
+function frackinship.makeStarDateReadable(tm)
+	local stardate = "Unknown"
+	if tm then
+		local tmStr1 = string.sub(tm,2,5 )
+		local tmStr2 = string.sub(tm,6,6 )
+		local tmStr3 = string.sub(tm,8,10 )
+		stardate = tmStr1.."."..tmStr2..":"..tmStr3
+	end
+	return stardate
+end
